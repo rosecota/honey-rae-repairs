@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "./Tickets.scss";
 
 export const TicketList = () => {
   const [tickets, setTickets] = useState([]);
@@ -20,7 +21,7 @@ export const TicketList = () => {
       <article className="tickets">
         {tickets.map((ticket) => {
           return (
-            <section>
+            <section className="ticket">
               <header>{ticket.description}</header>
               <footer>Emergency: {ticket.emergency ? "🧨" : "No"}</footer>
             </section>
