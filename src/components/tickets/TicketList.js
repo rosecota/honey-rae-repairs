@@ -3,6 +3,9 @@ import "./Tickets.scss";
 
 export const TicketList = () => {
   const [tickets, setTickets] = useState([]);
+  const [filteredTickets, setFiltered] = useState([]);
+  const localHoneyUser = localStorage.getItem("honey_user");
+  const honeyUserObject = JSON.parse(localHoneyUser);
 
   useEffect(
     () => {
@@ -15,11 +18,23 @@ export const TicketList = () => {
     },
     [] // When this array is empty, you are observing initial component state
   );
+
+  useEffect(() => {
+    if (honeyUserObject.staff) {
+      // For employees
+      setFiltered(tickets);
+    } else {
+      // For customers
+      const myTickets = tickets.filter((ticket) => ticket.userId === honeyUserObject.id);
+      setFiltered(myTickets);
+    }
+  }, [tickets]);
+
   return (
     <>
       <h2>List of Tickets</h2>
       <article className="tickets">
-        {tickets.map((ticket) => {
+        {filteredTickets.map((ticket) => {
           return (
             <section className="ticket">
               <header>{ticket.description}</header>
