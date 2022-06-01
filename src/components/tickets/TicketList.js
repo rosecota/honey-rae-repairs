@@ -4,8 +4,17 @@ import "./Tickets.scss";
 export const TicketList = () => {
   const [tickets, setTickets] = useState([]);
   const [filteredTickets, setFiltered] = useState([]);
+  const [emergency, setEmergency] = useState(false);
+
   const localHoneyUser = localStorage.getItem("honey_user");
   const honeyUserObject = JSON.parse(localHoneyUser);
+
+  useEffect(() => {
+    if (emergency) {
+      const emergencyTickets = tickets.filter((ticket) => ticket.emergency === true);
+      setFiltered(emergencyTickets);
+    }
+  }, [emergency]);
 
   useEffect(
     () => {
@@ -14,7 +23,6 @@ export const TicketList = () => {
         .then((ticketArray) => {
           setTickets(ticketArray);
         });
-      //   console.log("Initial state of tickets", tickets); // View the initial state of tickets
     },
     [] // When this array is empty, you are observing initial component state
   );
@@ -32,6 +40,14 @@ export const TicketList = () => {
 
   return (
     <>
+      <button
+        onClick={() => {
+          setEmergency(true);
+        }}
+      >
+        Emergency Only
+      </button>
+
       <h2>List of Tickets</h2>
       <article className="tickets">
         {filteredTickets.map((ticket) => {
